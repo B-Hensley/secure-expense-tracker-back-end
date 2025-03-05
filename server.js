@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ const Expense = mongoose.model("Expense", expenseSchema);
 
 const app = express();
 app.use(cors());
+app.use(helmet())
 
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
