@@ -1,4 +1,4 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer } = require("apollo-server-express");
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -10,8 +10,6 @@ const helmet = require("helmet");
 dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
 }).then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
@@ -51,6 +49,7 @@ const typeDefs = `
 
     type Mutation {
         addExpense(description: String!, amount: Float!, category: String!): Expense!
+        updateExpense(id: ID!, description: String, amount: Float): Expense!
         deleteExpense(id: ID!): Boolean
     }
 `;
@@ -66,6 +65,15 @@ const resolvers = {
             await newExpense.save();
             io.emit("expenseAdded", newExpense);
             return newExpense;
+        },
+        updateExpense: async (_, { id, description, amount }) => {
+            const update = {}
+            if (description !== undefined) update.description = description;
+            if (amount !== undefined) update.amount = amount;
+            const updatedExpense = await Expense.findOneAndUpdate({id}, update, {new: true, runValidators: true});
+            if (!updatedExpense) throw new Error("Expense not found");
+            io.emit("expenseUpdated", updatedExpense);
+            return updatedExpense;
         },
         deleteExpense: async (_, { id }) => {
             const result = await Expense.deleteOne({id});
@@ -89,9 +97,12 @@ io.on("connection", (socket) => {
     socket.on('deleteExpense', (id) => {
         io.emit("expenseDeleted", id);
     });
+    socket.on('updateExpense', (expense) => {
+        io.emit("expenseUpdated", expense);
+    });
 });
 
-httpServer.listen(4000, () => {
-    console.log(`Server is running on http://localhost:4000`);
-    console.log(`GraphQL endpoint: http://localhost:4000/graphql`);
+httpServer.listen(5700, () => {
+    console.log(`Server is running on http://localhost:5700`);
+    console.log(`GraphQL endpoint: http://localhost:5700/graphql`);
 });
