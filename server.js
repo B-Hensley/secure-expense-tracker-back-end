@@ -25,7 +25,10 @@ const Expense = mongoose.model("Expense", expenseSchema);
 
 const app = express();
 app.use(cors({
-    origin: 'https://secure-expense-tracker-front-end.vercel.app/'
+    origin: 'https://secure-expense-tracker-front-end.vercel.app/',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
 }));
 app.use(helmet());
 app.use((req, res, next) => {
