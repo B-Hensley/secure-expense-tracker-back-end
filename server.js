@@ -7,6 +7,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
 
+const PORT = process.env.PORT || 5700;
+
 dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -130,7 +132,7 @@ io.on("connection", (socket) => {
     });
 });
 
-httpServer.listen(5700, () => {
-    console.log(`Server is running on http://localhost:5700`);
-    console.log(`GraphQL endpoint: http://localhost:5700/graphql`);
+httpServer.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
+    console.log(`GraphQL endpoint: ${PORT}/graphql`);
 });
