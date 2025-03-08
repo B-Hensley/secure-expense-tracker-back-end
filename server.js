@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     );
     res.setHeader(
         "Content-Security-Policy",
-        "default-src 'self'; img-src 'self' https://*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://* ws://localhost:5700"
+        `default-src 'self'; img-src 'self' https://*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://* ws://${PORT}`
     );
     res.setHeader(
         "X-Powered-By",
