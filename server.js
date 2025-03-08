@@ -25,7 +25,30 @@ const Expense = mongoose.model("Expense", expenseSchema);
 
 const app = express();
 app.use(cors());
-app.use(helmet())
+app.use(helmet());
+app.use((req, res, next) => {
+    res.setHeader(
+        "X-Frame-Options",
+        "DENY"
+    );
+    res.setHeader(
+        "X-Content-Type-Options",
+        "nosniff"
+    );
+    res.setHeader(
+        "X-XSS-Protection",
+        "1; mode=block"
+    );
+    res.setHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; img-src 'self' https://*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://* ws://localhost:5700"
+    );
+    res.setHeader(
+        "X-Powered-By",
+        "Express"
+    );
+    next();
+});
 
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
