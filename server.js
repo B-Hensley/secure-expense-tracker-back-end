@@ -31,6 +31,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    accessControlAllowOrigin: 'https://secure-expense-tracker-front-end.vercel.app/',
 }));
 app.use(helmet());
 app.use((req, res, next) => {
