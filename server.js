@@ -113,7 +113,7 @@ const resolvers = {
 // Apollo Server Setup
 const server = new ApolloServer({ typeDefs, resolvers });
 server.start().then(() => {
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app, path: '/graphql' });
 });
 
 io.on("connection", (socket) => {
