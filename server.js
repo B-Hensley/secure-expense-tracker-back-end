@@ -31,7 +31,27 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
-app.use(helmet());
+
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Adjust as needed
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: [
+                "'self'",
+                "https://expense-tracker-pro-f2d07b08189f.herokuapp.com", // Backend
+                "wss://expense-tracker-pro-f2d07b08189f.herokuapp.com", // WebSocket
+                "https://secure-expense-tracker-front-end.vercel.app" // Frontend
+            ],
+            frameSrc: ["'none'"], // Matches X-Frame-Options: DENY
+        },
+    },
+    frameguard: { action: 'deny' }, // Replaces X-Frame-Options
+    xPoweredBy: false, // Suppresses X-Powered-By
+}));
+
 app.use((req, res, next) => {
     res.setHeader(
         "X-Frame-Options",
