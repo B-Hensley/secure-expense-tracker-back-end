@@ -27,7 +27,7 @@ const Expense = mongoose.model("Expense", expenseSchema);
 
 const app = express();
 app.use(cors({
-    origin: 'https://secure-expense-tracker-front-end.vercel.app/',
+    origin: 'https://secure-expense-tracker-front-end.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
@@ -134,8 +134,7 @@ const resolvers = {
 };
 
 // Apollo Server Setup
-const server = new ApolloServer({ typeDefs, resolvers });
-    cors: false,
+const server = new ApolloServer({ typeDefs, resolvers, cors: false });
     server.start().then(() => {
         server.applyMiddleware({ app, path: '/graphql' });
 });
