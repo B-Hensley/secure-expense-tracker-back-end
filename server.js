@@ -52,29 +52,29 @@ app.use(helmet({
     xPoweredBy: false, // Suppresses X-Powered-By
 }));
 
-app.use((req, res, next) => {
-    res.setHeader(
-        "X-Frame-Options",
-        "DENY"
-    );
-    res.setHeader(
-        "X-Content-Type-Options",
-        "nosniff"
-    );
-    res.setHeader(
-        "X-XSS-Protection",
-        "1; mode=block"
-    );
-    res.setHeader(
-        "Content-Security-Policy",
-        `default-src 'self'; img-src 'self' https://*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://* ws://${PORT}`
-    );
-    res.setHeader(
-        "X-Powered-By",
-        "Express"
-    );
-    next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader(
+//         "X-Frame-Options",
+//         "DENY"
+//     );
+//     res.setHeader(
+//         "X-Content-Type-Options",
+//         "nosniff"
+//     );
+//     res.setHeader(
+//         "X-XSS-Protection",
+//         "1; mode=block"
+//     );
+//     res.setHeader(
+//         "Content-Security-Policy",
+//         `default-src 'self'; img-src 'self' https://*; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://* ws://${PORT}`
+//     );
+//     res.setHeader(
+//         "X-Powered-By",
+//         "Express"
+//     );
+//     next();
+// });
 
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
